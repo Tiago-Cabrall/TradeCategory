@@ -23,7 +23,7 @@ namespace TradeCategory.Repository
                        
                 trademodel.Category = listCategoria.Where(x => QDTDias > x.DataBase ||
                                                           x.valor < trademodel.Valor &&
-                                                          x.Setor == trademodel.SetorCliente).
+                                                          x.Setor.ToUpper() == trademodel.SetorCliente.ToUpper()).
                                                     OrderBy(x => x.valor).
                                                     Select(x => x.Name).
                                                     FirstOrDefault();

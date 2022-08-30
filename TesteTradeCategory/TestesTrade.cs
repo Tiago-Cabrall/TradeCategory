@@ -88,7 +88,7 @@ namespace TesteTradeCategory
             TradeServico tradeservico = new TradeServico();
 
             //Act
-            ITrade trade = tradeservico.TratarString("1000000 Private 01/02/2028", DateTime.ParseExact("12/11/2020", "MM/dd/yyyy", null));
+            ITrade trade = tradeservico.TrataString("1000000 Private 01/02/2028", DateTime.ParseExact("12/11/2020", "MM/dd/yyyy", null));
          
             //Assert
             Assert.Equal("Private", trade.SetorCliente);

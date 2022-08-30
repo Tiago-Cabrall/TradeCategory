@@ -3,6 +3,7 @@ using TradeCategory.Servicos;
 using TradeCategory.Interfaces;
 using TradeCategory.Model;
 using TradeCategory.Repository;
+using System.Globalization;
 
 namespace TradeCategory
 {
@@ -22,13 +23,27 @@ namespace TradeCategory
         static void Input()
         {
            TradeModel trademodel;
-           TradeServico tradeservico = new TradeServico();
+           TradeServico tradeservico = new TradeServico();            
+            DateTime DataReferencia;
+            int QtdeTrade;
 
-            Console.Write("Data Referência (Format: mm/dd/yyyy):");
-            var DataReferencia = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy", null);
+            Console.Write("Data Referência (Formato: mm/dd/yyyy):");
+        
+            while (!DateTime.TryParseExact(Console.ReadLine(), "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DataReferencia ))
+            {
+                Console.WriteLine(" - Insira uma data válida nesse formato mm/dd/yyyy");
+                Console.Write("Data Referência (Formato: mm/dd/yyyy):");
+            }           
+
             Console.WriteLine("");
-            Console.Write("Insira o número de negócios na carteira: ");
-            var QtdeTrade = int.Parse(Console.ReadLine());
+            Console.Write("Insira o número de negócios na carteira: ");                       
+
+            while (!int.TryParse(Console.ReadLine(), out QtdeTrade))
+            {
+                Console.WriteLine(" - Insira apena número inteiro");
+                Console.Write("Insira o número de negócios na carteira: ");
+            }
+
             Console.WriteLine("");
             Console.WriteLine("[Valor da negociação] [Setor do cliente] [Data do próximo pagamento pendente(Formato: mm/dd/yyyy):");
 
@@ -36,10 +51,19 @@ namespace TradeCategory
             {
                 Console.Write(i+1 + " de " + QtdeTrade + " - ");
 
-                trademodel = tradeservico.TratarString(Console.ReadLine(), DataReferencia);
-                ListaITrade.Add(trademodel);
+                var LineString = Console.ReadLine();
 
-                CategoriaRepository.GetCategoria(trademodel);
+                
+                if (tradeservico.TrataElementosString(LineString))
+                {
+                    trademodel = tradeservico.TrataString(LineString, DataReferencia);
+                    ListaITrade.Add(trademodel);
+
+                    CategoriaRepository.GetCategoria(trademodel);
+                }
+                    else
+                        i = i - 1;
+
             }
 
           
