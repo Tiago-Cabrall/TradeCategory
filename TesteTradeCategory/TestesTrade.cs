@@ -9,7 +9,8 @@ namespace TesteTradeCategory
 {
     public class TestesTrade
     {
-        List<ITrade> ListaITrade = new List<ITrade>();        
+        List<ITrade> ListaITrade = new List<ITrade>();
+        TradeServico tradeservico = new TradeServico();
         TradeModel trademodel;
 
 
@@ -79,13 +80,79 @@ namespace TesteTradeCategory
             //Assert
             Assert.Equal("MEDIUMRISK", trademodel.Category);
         }
-        
-        
+                
+
         [Fact]
-        public void TestaTratarString()
+        public void TestaTrataElementoStringReturnTrue()
+        {
+            //Arrange    
+            var Elemento = "1000000 Private 01/02/2028";
+
+            //Act
+            var retorno = tradeservico.TrataElementosString(Elemento);
+
+            //Assert           
+            Assert.True(retorno);
+        }
+
+        [Fact]
+        public void TestaTrataElementoStringReturnFalseValorInvalido()
+        {
+            //Arrange    
+            var Elemento = "1000000 Prte 01/02/2028";
+
+            //Act
+            var retorno = tradeservico.TrataElementosString(Elemento);
+
+            //Assert           
+            Assert.False(retorno);
+        }
+
+        [Fact]
+        public void TestaTrataElementoStringReturnFalseDataFormatoInvalido()
+        {
+            //Arrange    
+            var Elemento = "1000000 Private 20/02/2028";
+
+            //Act
+            var retorno = tradeservico.TrataElementosString(Elemento);
+
+            //Assert           
+            Assert.False(retorno);
+        }
+
+        [Fact]
+        public void TestaTrataElementoStringReturnFalseDataCaracterInvalido()
+        {
+            //Arrange    
+            var Elemento = "1000000 Private 228";
+
+            //Act
+            var retorno = tradeservico.TrataElementosString(Elemento);
+
+            //Assert           
+            Assert.False(retorno);
+        }
+
+
+        [Fact]
+        public void TestaTrataElementoStringReturnFalseSetorInvalido()
+        {
+            //Arrange    
+            var Elemento = "EraValor Private 01/02/2028";
+
+            //Act
+            var retorno = tradeservico.TrataElementosString(Elemento);
+
+            //Assert           
+            Assert.False(retorno);
+        }
+
+        [Fact]
+        public void TestaTrataString()
         {
             //Arrange            
-            TradeServico tradeservico = new TradeServico();
+            
 
             //Act
             ITrade trade = tradeservico.TrataString("1000000 Private 01/02/2028", DateTime.ParseExact("12/11/2020", "MM/dd/yyyy", null));
@@ -94,6 +161,8 @@ namespace TesteTradeCategory
             Assert.Equal("Private", trade.SetorCliente);
         }       
         
+
+
         
     }
 }
